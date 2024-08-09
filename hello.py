@@ -33,7 +33,7 @@ def list_uploaded_videos():
                             """
                             <div style="background-color:black;padding:3px;">
                                 <div style="background-color:#F46760;color:white;padding:5px;text-align:center;">
-                                    ❎ 딥페이크 미디어입니다.
+                                    ❎ 딥페이크 미디어입니다
                                 </div>
                             </div>
                             """,
