@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 # 제목과 간단한 설명 추가
+st.set_page_config(page_title="플랫폼이름", layout="wide")
 st.title('플랫폼이름')
 st.write('오디오딥')
 
@@ -31,10 +32,8 @@ def list_uploaded_videos():
                     if is_deepfake(i + j):
                         st.markdown(
                             """
-                            <div style="background-color:black;padding:3px;">
-                                <div style="background-color:#F46760;color:white;padding:5px;text-align:center;">
-                                    ❎ 딥페이크 미디어입니다.
-                                </div>
+                            <div style="background-color:#F46760;padding:10px;border-radius:5px;text-align:center;">
+                                ❎ 딥페이크 미디어입니다.
                             </div>
                             """,
                             unsafe_allow_html=True
@@ -42,10 +41,8 @@ def list_uploaded_videos():
                     else:
                         st.markdown(
                             """
-                            <div style="background-color:black;padding:3px;">
-                                <div style="background-color:lightgreen;color:white;padding:5px;text-align:center;">
-                                    ✅ 실제 미디어입니다.
-                                </div>
+                            <div style="background-color:lightgreen;padding:10px;border-radius:5px;text-align:center;">
+                                ✅ 실제 미디어입니다.
                             </div>
                             """,
                             unsafe_allow_html=True
