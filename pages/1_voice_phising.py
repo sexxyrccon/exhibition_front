@@ -1,5 +1,5 @@
 import streamlit as st
-from nlpmodel import NLP
+from pages.utils.nlpmodel import NLP
 
 st.title("보이스 피싱 감지 모델")
 st.markdown(":gray[*NLP기술을 활용한 보이스 피싱 감지*]")
