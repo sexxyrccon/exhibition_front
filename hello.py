@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from pathlib import Path
+from moviepy.editor import VideoFileClip
+from model import analyze_audio, extract_mfcc_features
 
 # 제목과 간단한 설명 추가
 st.set_page_config(page_title="플랫폼이름", layout="wide")
@@ -13,10 +15,6 @@ st.write('오디오딥')
 # 동영상 파일을 저장할 디렉토리
 VIDEO_DIR = Path("videos")
 VIDEO_DIR.mkdir(exist_ok=True)
-
-# 딥페이크 미디어를 식별하는 함수 (예시로 2번째 영상이 딥페이크라고 가정)
-def is_deepfake(index):
-    return index == 1
 
 # 업로드된 동영상을 리스트로 표시하는 함수
 def list_uploaded_videos():
@@ -29,24 +27,40 @@ def list_uploaded_videos():
                     video_file = video_files[i + j]
                     st.write(f"**{video_file.name}**")  # 제목 표시
                     st.video(str(video_file), format="video/mp4", start_time=0)
-                    if is_deepfake(i + j):
-                        st.markdown(
-                            """
-                            <div style="background-color:#F46760;padding:10px;border-radius:5px;text-align:center;">
-                                ❎ 딥페이크 미디어입니다.
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
-                    else:
-                        st.markdown(
-                            """
-                            <div style="background-color:lightgreen;padding:10px;border-radius:5px;text-align:center;">
-                                ✅ 실제 미디어입니다.
-                            </div>
-                            """,
-                            unsafe_allow_html=True
-                        )
+                    
+                    # 오디오 추출 및 딥페이크 판별
+                    audio_path = extract_audio(video_file)
+                    if audio_path:
+                        is_deepfake = analyze_audio(str(audio_path))  # Path 객체를 문자열로 변환하여 전달
+                        if is_deepfake:
+                            st.markdown(
+                                """
+                                <div style="background-color:#F46760;padding:10px;border-radius:5px;text-align:center;">
+                                    ❎ 딥페이크 미디어입니다.
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            st.markdown(
+                                """
+                                <div style="background-color:lightgreen;padding:10px;border-radius:5px;text-align:center;">
+                                    ✅ 실제 미디어입니다.
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+# 오디오 추출 함수
+def extract_audio(video_path):
+    try:
+        video = VideoFileClip(str(video_path))
+        audio_path = video_path.with_suffix('.wav')
+        video.audio.write_audiofile(audio_path)
+        return audio_path
+    except Exception as e:
+        st.error(f"오디오 추출 실패: {e}")
+        return None
 
 # 동영상 업로드 섹션
 st.header("비디오 업로드")
