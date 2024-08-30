@@ -5,7 +5,7 @@ import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from konlpy.tag import Okt
 
-client = OpenAI()
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 model = joblib.load('./pages/utils/voice_fraud_detection_model_with_weights.pkl')
 okt = Okt()
 tfidf = joblib.load('./pages/utils/tfidf_vectorizer.pkl')
