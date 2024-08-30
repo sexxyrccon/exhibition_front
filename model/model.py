@@ -90,8 +90,8 @@ def train_model(X, y):
     joblib.dump(scaler, scaler_filename)
 
 def analyze_audio(input_audio_path):
-    model_filename = "svm_model.pkl"
-    scaler_filename = "scaler.pkl"
+    model_filename = "./model/svm_model.pkl"
+    scaler_filename = "./model/scaler.pkl"
     svm_classifier = joblib.load(model_filename)
     scaler = joblib.load(scaler_filename)
 
