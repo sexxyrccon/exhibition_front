@@ -5,6 +5,7 @@ import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from konlpy.tag import Okt
 from pages.utils.db import GooglesheetUtils
+import traceback
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 model = joblib.load('./pages/utils/voice_fraud_detection_model_with_weights.pkl')
@@ -88,8 +89,6 @@ sheet = GooglesheetUtils()
 if txt != '':
     isPhishing, data = evaluate(txt)
 
-    value = [[txt, f'[{isPhishing},\n {data}]']]
-    sheet.append_data(value, 'Sheet1!A1')
     st.write(data)
     st.write(isPhishing)
 
@@ -100,8 +99,19 @@ if txt != '':
         marks = ''
 
         reasons = data['reason']
-        for i in range(len(reasons['text'])):
-            marks += f"* {reasons['text'][i]}\n  - {reasons['why'][i]}\n"
+        try:
+            for i in range(len(reasons['text'])):
+                marks += f"* {reasons['text'][i]}\n  - {reasons['why'][i]}\n"
+
+            value = [[txt, f'[{isPhishing},\n {data}]']]
+        except Exception as e:
+            error_message = str(e)
+            error_traceback = traceback.format_exc()
+
+            error = error_message + '\n' + error_traceback
+            value = [[txt,f'[{isPhishing},\n {data}]' ,error]]
+        
+        sheet.append_data(value, 'Sheet1!A1')
         print(marks)
         st.markdown(marks)
     elif isPhishing and data == '':
@@ -110,12 +120,3 @@ if txt != '':
     else:
         st.divider()
         st.subheader('본 문장은 보이스피싱이 아닙니다')
-
-# if isPhishing:
-#     if data == '':
-#         st.header('본 문장은 보이스피싱으로 의심됩니다')
-#     else:
-#         st.header('본 문장은 보이스피싱으로 의심됩니다')
-#         st.subheader('보이스피싱으로 의심되는 문장')
-# else:
-#     st.markdown("### 아닌듯")
