@@ -5,7 +5,7 @@ import numpy as np
 import os
 from pathlib import Path
 from moviepy.editor import VideoFileClip
-from model import analyze_audio, extract_mfcc_features
+from model.model import analyze_audio, extract_mfcc_features
 
 # 제목과 간단한 설명 추가
 st.set_page_config(page_title="플랫폼이름", layout="wide")
