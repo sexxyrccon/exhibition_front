@@ -5,7 +5,7 @@ import numpy as np
 import os
 from pathlib import Path
 import subprocess  # FFmpeg 사용
-from model.model import analyze_audio, extract_mfcc_features
+from model.model1 import analyze_audio, extract_mfcc_features
 
 st.set_page_config(page_title="플랫폼이름", layout="wide")
 st.title('플랫폼이름')
