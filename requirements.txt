@@ -6,3 +6,4 @@ joblib
 konlpy
 openai
 scikit-learn
+librosa
