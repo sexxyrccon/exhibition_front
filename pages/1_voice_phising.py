@@ -89,7 +89,7 @@ if txt != '':
     isPhishing, data = evaluate(txt)
 
     value = [[txt, f'[{isPhishing},\n {data}]']]
-    sheet.append_data(value)
+    sheet.append_data(value, 'Sheet1!A1')
     st.write(data)
     st.write(isPhishing)
 
