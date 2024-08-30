@@ -1,0 +1,8 @@
+pandas
+matplotlib
+numpy
+moviepy
+joblib
+konlpy
+openai
+scikit-learn
