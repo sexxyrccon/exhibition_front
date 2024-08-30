@@ -7,3 +7,4 @@ konlpy
 openai
 scikit-learn
 librosa
+google-api-python-client

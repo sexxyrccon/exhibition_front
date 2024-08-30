@@ -4,6 +4,7 @@ import json
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 from konlpy.tag import Okt
+from pages.utils.db import GooglesheetUtils
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 model = joblib.load('./pages/utils/voice_fraud_detection_model_with_weights.pkl')
@@ -82,8 +83,13 @@ st.markdown(":gray[*NLP기술을 활용한 보이스 피싱 감지*]")
 
 txt = st.text_area("의심되는 보이스피싱 문구", height= 200)
 
+sheet = GooglesheetUtils()
+
 if txt != '':
     isPhishing, data = evaluate(txt)
+
+    value = [[txt, f'[{isPhishing},\n {data}]']]
+    sheet.append_data(value)
     st.write(data)
     st.write(isPhishing)
 
