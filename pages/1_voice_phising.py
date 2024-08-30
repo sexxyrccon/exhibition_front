@@ -91,32 +91,34 @@ if txt != '':
 
     st.write(data)
     st.write(isPhishing)
+    
+    try:
+        if isPhishing and data != '':
+            st.divider()
+            st.subheader('본 문장은 보이스피싱으로 의심됩니다')
+            st.markdown('보이스피싱으로 의심되는 문장과 어휘들')
+            marks = ''
 
-    if isPhishing and data != '':
-        st.divider()
-        st.subheader('본 문장은 보이스피싱으로 의심됩니다')
-        st.markdown('보이스피싱으로 의심되는 문장과 어휘들')
-        marks = ''
+            reasons = data['reason']
 
-        reasons = data['reason']
-        try:
             for i in range(len(reasons['text'])):
                 marks += f"* {reasons['text'][i]}\n  - {reasons['why'][i]}\n"
+            
+            print(marks)
+            st.markdown(marks)
+        elif isPhishing and data == '':
+            st.divider()
+            st.subheader('본 문장은 보이스피싱으로 의심됩니다')
 
-            value = [[txt, f'[{isPhishing},\n {data}]']]
-        except Exception as e:
-            error_message = str(e)
-            error_traceback = traceback.format_exc()
+        else:
+            st.divider()
+            st.subheader('본 문장은 보이스피싱이 아닙니다')
+        textvalue = [[txt, f'[{isPhishing},\n {data}]']]
+    except Exception as e:
+        error_message = str(e)
+        error_traceback = traceback.format_exc()
 
-            error = error_message + '\n' + error_traceback
-            value = [[txt,f'[{isPhishing},\n {data}]' ,error]]
-        
-        sheet.append_data(value, 'Sheet1!A1')
-        print(marks)
-        st.markdown(marks)
-    elif isPhishing and data == '':
-        st.divider()
-        st.subheader('본 문장은 보이스피싱으로 의심됩니다')
-    else:
-        st.divider()
-        st.subheader('본 문장은 보이스피싱이 아닙니다')
+        error = error_message + '\n' + error_traceback
+        textvalue = [[txt,f'[{isPhishing},\n {data}]' ,error]]
+
+    sheet.append_data(textvalue, 'Sheet1!A1')
